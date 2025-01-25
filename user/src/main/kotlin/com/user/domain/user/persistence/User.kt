@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     val id: Long = 0,
 
     @Column(name = "email", nullable = false)
