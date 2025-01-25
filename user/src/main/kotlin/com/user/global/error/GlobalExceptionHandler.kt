@@ -14,7 +14,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException::class)
     fun userExceptionHandler(e: UserException): ResponseEntity<ErrorResponse> =
-        ResponseEntity(ErrorResponse.of(e), HttpStatus.valueOf(e.status))
+        ResponseEntity(ErrorResponse.of(e), e.status)
 
     @ExceptionHandler(BindException::class)
     fun handleBindException(e: BindException): ResponseEntity<ValidationErrorResponse> =

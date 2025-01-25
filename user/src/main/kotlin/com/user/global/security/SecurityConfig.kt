@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -19,6 +20,11 @@ class SecurityConfig(
     private val customAuthenticationEntryPointHandler: CustomAuthenticationEntryPointHandler,
     private val authenticationFilter: AuthenticationFilter
 ) {
+
+    @Bean
+    fun passwordEncrypt(): PasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -43,6 +49,14 @@ class SecurityConfig(
             httpRequests
                 // health check
                 .requestMatchers(HttpMethod.GET, "/user/health").permitAll()
+
+                // auth
+                .requestMatchers(HttpMethod.POST, "/user/auth/signup").permitAll()
+                .requestMatchers(HttpMethod.POST, "/user/auth/login").permitAll()
+
+                // user
+                .requestMatchers(HttpMethod.GET, "/user").authenticated()
+
                 .anyRequest().denyAll()
         }
 
