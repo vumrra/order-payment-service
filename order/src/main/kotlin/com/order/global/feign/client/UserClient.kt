@@ -1,5 +1,6 @@
 package com.order.global.feign.client
 
+import com.order.global.internal.user.stub.UserExistsStub
 import com.order.global.internal.user.stub.UserStub
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,7 +11,7 @@ interface UserClient {
     @GetMapping("/user/exists")
     fun exists(
         @RequestParam("userId") userId: Long
-    ): Boolean
+    ): UserExistsStub
 
     @GetMapping("/user")
     fun queryById(
