@@ -10,14 +10,21 @@ eureka:
       defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
 spring:
   application:
-    name: gateway
+    name: gateway-service
   cloud:
     gateway:
       routes:
-        - id: user
-          uri: lb://user
+        - id: user-service
+          uri: lb://user-service
           predicates:
             - Path=/user/**
+          filters:
+            - RemoveRequestHeader= Cookie,Set-Cookie
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
           filters:
             - RemoveRequestHeader= Cookie,Set-Cookie
 management:
