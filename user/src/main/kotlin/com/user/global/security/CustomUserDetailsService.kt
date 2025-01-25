@@ -15,6 +15,6 @@ class CustomUserDetailsService(
     override fun loadUserByUsername(userId: String): UserDetails =
         CustomUserDetails(
             userRepository.findById(userId.toLong())
-                .orElseThrow { UserException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND.value()) }
+                .orElseThrow { UserException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
         )
 }

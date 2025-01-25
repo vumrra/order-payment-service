@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserServiceImpl(
+class AuthServiceImpl(
     private val passwordEncoder: PasswordEncoder,
     private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val jwtProperties: JwtProperties,
     private val jwtGenerator: JwtGenerator
-) : UserService {
+) : AuthService {
 
     @Transactional
     override fun signup(dto: SignupDto) {
@@ -48,8 +48,8 @@ class UserServiceImpl(
         userRepository.findByEmail(email)
             ?: throw UserException("User not found by email: $email", HttpStatus.NOT_FOUND)
 
-    private fun validPassword(user: User, password: String) {
-        val isMatched = passwordEncoder.matches(user.password, password)
+    private fun validPassword(user: User, rawPassword: String) {
+        val isMatched = passwordEncoder.matches(rawPassword, user.password)
         if (isMatched.not()) {
             throw UserException("Passwords do not match", HttpStatus.BAD_REQUEST)
         }

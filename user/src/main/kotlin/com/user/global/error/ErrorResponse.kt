@@ -12,7 +12,7 @@ data class ErrorResponse(
         fun of(e: UserException) =
             ErrorResponse(
                 message = e.message,
-                status = e.status
+                status = e.status.value()
             )
 
         fun of(e: BindingResult): ValidationErrorResponse {

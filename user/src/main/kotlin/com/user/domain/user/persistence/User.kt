@@ -1,6 +1,6 @@
 package com.user.domain.user.persistence
 
-import com.user.domain.user.dto.UserSignupDto
+import com.user.domain.auth.dto.SignupDto
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -33,7 +33,7 @@ class User(
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     companion object {
-        fun of(dto: UserSignupDto, encryptPassword: String) = User(
+        fun of(dto: SignupDto, encryptPassword: String) = User(
             email = dto.email,
             name = dto.name,
             password = encryptPassword,

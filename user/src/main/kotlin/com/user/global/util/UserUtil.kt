@@ -19,7 +19,7 @@ class UserUtil(
 
     fun getCurrentUser(): User {
         return userRepository.findByIdOrNull(getCurrentUserId())
-            ?: throw UserException("Current User Not Found", HttpStatus.NOT_FOUND.value())
+            ?: throw UserException("Current User Not Found", HttpStatus.NOT_FOUND)
     }
 
 }
