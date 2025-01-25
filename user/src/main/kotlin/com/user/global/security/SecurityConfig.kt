@@ -1,6 +1,7 @@
 package com.user.global.security
 
 import com.user.global.filter.AuthenticationFilter
+import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -27,7 +28,7 @@ class SecurityConfig(
     }
 
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity, serverProperties: ServerProperties): SecurityFilterChain {
         http.formLogin { it.disable() }
             .httpBasic { it.disable() }
 
@@ -54,8 +55,9 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.POST, "/user/auth/signup").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/auth/login").permitAll()
 
-                // user
-                .requestMatchers(HttpMethod.GET, "/user").authenticated()
+                // server to server
+                .requestMatchers(HttpMethod.GET, "/user").permitAll()
+                .requestMatchers(HttpMethod.GET, "/user/exists").permitAll()
 
                 .anyRequest().denyAll()
         }
