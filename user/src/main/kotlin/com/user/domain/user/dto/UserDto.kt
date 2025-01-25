@@ -10,3 +10,7 @@ data class UserInfoDto(
     val sex: Sex,
     val authority: Authority
 )
+
+data class UserExistsDto(
+    val isExists: Boolean
+)
