@@ -1,0 +1,29 @@
+server:
+  port: 8080
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOSTNAME:localhost}:8761/eureka/
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: lb://user
+          predicates:
+            - Path=/user/**
+          filters:
+            - RemoveRequestHeader= Cookie,Set-Cookie
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+jwt:
+  secret-key: 7LCo7J2A7Jqw66yasd3e3rSAFESDFasd2sad2DSFESfsdfeDSFiw7LCo7J2A7Jqw66y867OR7Lap7KCE6riw
