@@ -13,16 +13,20 @@ class Order(
     val userId: Long,
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val orderProducts: List<OrderProduct> = emptyList(),
-    val totalPrice: Int,
+    @Enumerated(EnumType.STRING)
+    var status: OrderStatus,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     companion object {
-        fun of(userId: Long, totalPrice: Int, orderProducts: List<OrderProduct>): Order =
+        fun of(userId: Long): Order =
             Order(
                 userId = userId,
-                orderProducts = orderProducts,
-                totalPrice = totalPrice,
+                status = OrderStatus.PENDING,
                 createdAt = LocalDateTime.now()
             )
     }
+}
+
+enum class OrderStatus {
+    PENDING, CANCELLED, CONFIRMED
 }

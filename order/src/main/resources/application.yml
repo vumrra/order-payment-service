@@ -17,7 +17,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: ${DDL_AUTO:update}
+      ddl-auto: ${DDL_AUTO:create}
     properties:
       hibernate:
         default_batch_fetch_size: 1000
@@ -30,6 +30,28 @@ spring:
     redis:
       host: localhost
       port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: op
+      auto-offset-reset: earliest
+      properties:
+        spring:
+          json:
+            use:
+              type:
+                headers: 'false'
+            trusted:
+              packages: '*'
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      retries: 1
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      ack-mode: manual
+      poll-timeout: 5000
 
 security:
   jwt:

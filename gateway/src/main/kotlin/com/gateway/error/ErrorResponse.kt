@@ -4,7 +4,7 @@ data class ErrorResponse(
     val message: String
 ) {
     companion object {
-        fun of(cause: Throwable): ErrorResponse =
-            ErrorResponse(cause.message!!)
+        fun of(message: String): ErrorResponse =
+            ErrorResponse(message)
     }
 }

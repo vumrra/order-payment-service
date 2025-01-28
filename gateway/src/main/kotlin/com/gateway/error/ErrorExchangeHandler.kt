@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.server.*
 import reactor.core.publisher.Mono
 import java.net.ConnectException
 
-@Order(-1)
 @Component
 class ErrorExchangeHandler(
     errorAttributes: ErrorAttributes,
@@ -48,7 +47,7 @@ class ErrorExchangeHandler(
         log.error(ex.message)
         return ServerResponse.status(ex.httpStatus)
             .bodyValue(
-                ErrorResponse.of(ex.cause ?: Throwable("Not Exists Cause by Exception"))
+                ErrorResponse.of(ex.message ?: "Not Exists Cause by Exception")
             )
     }
 

@@ -1,9 +1,7 @@
 package com.order.domain.order.dto
 
-import com.order.domain.order.persistence.OrderProduct
-
 data class OrderReqDto(
-    val products: List<OrderProduct>
+    val products: List<ProductDto>
 )
 
 data class ProductDto(
