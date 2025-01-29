@@ -27,6 +27,13 @@ spring:
             - Path=/order/**
           filters:
             - RemoveRequestHeader= Cookie,Set-Cookie
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
+          filters:
+            - RemoveRequestHeader= Cookie,Set-Cookie
 management:
   endpoints:
     web:

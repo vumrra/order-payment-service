@@ -1,4 +1,4 @@
-package com.order.global.error
+package com.product.global.error
 
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -12,8 +12,8 @@ import org.springframework.web.servlet.NoHandlerFoundException
 @RestControllerAdvice
 class GlobalExceptionHandler {
 
-    @ExceptionHandler(OrderException::class)
-    fun orderExceptionHandler(e: OrderException): ResponseEntity<ErrorResponse> =
+    @ExceptionHandler(ProductException::class)
+    fun productExceptionHandler(e: ProductException): ResponseEntity<ErrorResponse> =
         ResponseEntity(ErrorResponse.of(e), e.status)
 
     @ExceptionHandler(BindException::class)
