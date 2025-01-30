@@ -50,7 +50,7 @@ class SecurityConfig(
             httpRequests.requestMatchers(HttpMethod.POST, "/order").authenticated()
 
             // server to server
-            httpRequests.requestMatchers(HttpMethod.GET, "/order").permitAll()
+            httpRequests.requestMatchers(HttpMethod.GET, "/order/{order_id}").permitAll()
 
             httpRequests.anyRequest().denyAll()
         }
