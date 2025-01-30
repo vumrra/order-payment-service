@@ -36,6 +36,7 @@ class ProductReservedConsumer(
         try {
             paymentService.pay(
                 userId = event.userId,
+                orderId = event.orderId,
                 move = event.totalPrice,
                 depositDestination = event.depositDestination,
             )
