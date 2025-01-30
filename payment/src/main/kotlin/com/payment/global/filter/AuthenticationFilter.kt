@@ -1,6 +1,6 @@
 package com.payment.global.filter
 
-import com.payment.global.user.stub.Authority
+import com.payment.global.internal.user.stub.Authority
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

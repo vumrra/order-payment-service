@@ -6,6 +6,8 @@ import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReservedEvent
 import com.product.domain.product.persistence.ProductRepository
 import com.product.global.error.ProductException
+import com.product.global.internal.order.api.OrderApi
+import com.product.global.kafka.consumer.dto.PaymentFailedEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -17,7 +19,8 @@ import java.util.*
 @Service
 class ProductServiceImpl(
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val orderApi: OrderApi
 ) : ProductService {
 
     @Transactional
@@ -25,7 +28,7 @@ class ProductServiceImpl(
 
         var totalPrice = 0L
 
-        val products = event.products.map {
+        event.products.forEach {
             val product = (productRepository.findByIdOrNull(it.productId)
                 ?: throw ProductException("Product with id ${it.productId} not found", HttpStatus.NOT_FOUND))
 
@@ -45,6 +48,19 @@ class ProductServiceImpl(
             )
         )
 
+    }
+
+    @Transactional
+    override fun rollbackProduct(event: PaymentFailedEvent) {
+        val orderDto = orderApi.queryById(event.orderId)
+
+        orderDto.orderProducts.forEach {
+            val product = (productRepository.findByIdOrNull(it.productId)
+                ?: throw ProductException("Product with id ${it.productId} not found", HttpStatus.NOT_FOUND))
+
+            product.add(it.quantity)
+            productRepository.save(product)
+        }
     }
 
     @Transactional(readOnly = true)

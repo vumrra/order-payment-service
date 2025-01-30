@@ -1,4 +1,4 @@
-package com.payment.global.user.stub
+package com.payment.global.internal.user.stub
 
 data class UserStub(
     val userId: Long,

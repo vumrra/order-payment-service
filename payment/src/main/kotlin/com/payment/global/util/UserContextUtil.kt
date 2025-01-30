@@ -1,7 +1,7 @@
 package com.payment.global.util
 
-import com.payment.global.user.api.UserApi
-import com.payment.global.user.stub.UserStub
+import com.payment.global.internal.user.api.UserApi
+import com.payment.global.internal.user.stub.UserStub
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 

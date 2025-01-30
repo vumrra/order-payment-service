@@ -25,6 +25,10 @@ class Product(
         }
     }
 
+    fun add(count: Int) {
+        quantity += count
+    }
+
     companion object {
         fun of(name: String, price: Long, quantity: Int) =
             Product(

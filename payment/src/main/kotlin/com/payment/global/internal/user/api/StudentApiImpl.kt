@@ -1,8 +1,8 @@
-package com.payment.global.user.api
+package com.payment.global.internal.user.api
 
 import com.payment.global.feign.client.UserClient
-import com.payment.global.user.stub.UserExistsStub
-import com.payment.global.user.stub.UserStub
+import com.payment.global.internal.user.stub.UserExistsStub
+import com.payment.global.internal.user.stub.UserStub
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,7 +1,7 @@
 package com.payment.global.feign.client
 
-import com.payment.global.user.stub.UserExistsStub
-import com.payment.global.user.stub.UserStub
+import com.payment.global.internal.user.stub.UserExistsStub
+import com.payment.global.internal.user.stub.UserStub
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
