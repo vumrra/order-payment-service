@@ -22,15 +22,18 @@ class ProductServiceImpl(
 
     @Transactional
     override fun deductedProduct(event: OrderReservedEvent) {
+
+        var totalPrice = 0L
+
         val products = event.products.map {
             val product = (productRepository.findByIdOrNull(it.productId)
                 ?: throw ProductException("Product with id ${it.productId} not found", HttpStatus.NOT_FOUND))
 
+            totalPrice += product.price * it.quantity
+
             product.deduction(it.quantity)
             productRepository.save(product)
         }
-
-        val totalPrice = products.sumOf { it.price * it.quantity }
 
         applicationEventPublisher.publishEvent(
             ProductReservedEvent(

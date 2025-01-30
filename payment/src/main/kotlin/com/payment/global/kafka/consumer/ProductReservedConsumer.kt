@@ -41,7 +41,7 @@ class ProductReservedConsumer(
                 depositDestination = event.depositDestination,
             )
         } catch (e: Exception) {
-            log.error("Failed to Payment, user id = ${event.userId}, depositDestination = ${event.depositDestination}", e)
+            log.error("Failed to Payment, user id = ${event.userId}, move = ${event.totalPrice} depositDestination = ${event.depositDestination}", e)
 
             paymentPublisher.publishPaymentFailedEvent(
                 PaymentFailedEvent(
