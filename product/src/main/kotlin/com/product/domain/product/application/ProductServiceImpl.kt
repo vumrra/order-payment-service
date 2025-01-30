@@ -1,5 +1,7 @@
 package com.product.domain.product.application
 
+import com.product.domain.product.dto.ProductAllDto
+import com.product.domain.product.dto.ProductDto
 import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReservedEvent
 import com.product.domain.product.persistence.ProductRepository
@@ -9,6 +11,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -39,6 +42,24 @@ class ProductServiceImpl(
             )
         )
 
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryAllProducts(): ProductAllDto {
+        val products = productRepository.findAll().map {
+            ProductDto(
+                productId = it.id,
+                name = it.name,
+                price = it.price,
+                quantity = it.quantity,
+                createdDate = LocalDateTime.now(),
+            )
+        }
+
+        return ProductAllDto(
+            count = products.size,
+            products = products
+        )
     }
 
 }
