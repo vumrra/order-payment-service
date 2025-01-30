@@ -45,6 +45,9 @@ class SecurityConfig(
             // health check
             httpRequests.requestMatchers(HttpMethod.GET, "/product/health").permitAll()
 
+            // product
+            httpRequests.requestMatchers(HttpMethod.GET, "/product").authenticated()
+
             httpRequests.anyRequest().denyAll()
         }
 

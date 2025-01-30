@@ -30,7 +30,7 @@ class ProductServiceImpl(
             productRepository.save(product)
         }
 
-        val totalPrice = products.sumOf { it.price }
+        val totalPrice = products.sumOf { it.price * it.quantity }
 
         applicationEventPublisher.publishEvent(
             ProductReservedEvent(
