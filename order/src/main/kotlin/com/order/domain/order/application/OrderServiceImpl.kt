@@ -1,6 +1,8 @@
 package com.order.domain.order.application
 
 import com.order.domain.order.dto.OrderReqDto
+import com.order.domain.order.dto.OrderResDto
+import com.order.domain.order.dto.ProductDto
 import com.order.domain.order.event.OrderReservedEvent
 import com.order.domain.order.event.ProductEvent
 import com.order.domain.order.persistence.*
@@ -70,6 +72,24 @@ class OrderServiceImpl(
 
         order.confirm()
         orderRepository.save(order)
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryById(orderId: Long): OrderResDto {
+        val order = (orderRepository.findByIdOrNull(orderId)
+            ?: throw OrderException("Not Found Order with id: $orderId", HttpStatus.NOT_FOUND))
+
+        return OrderResDto(
+            orderId = order.id,
+            orderStatus = order.status,
+            cancelReason = order.cancelReason,
+            orderProducts = order.orderProducts.map {
+                ProductDto(
+                    productId = it.productId,
+                    quantity = it.quantity,
+                )
+            }
+        )
     }
 
 }

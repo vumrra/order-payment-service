@@ -49,6 +49,9 @@ class SecurityConfig(
             // order
             httpRequests.requestMatchers(HttpMethod.POST, "/order").authenticated()
 
+            // server to server
+            httpRequests.requestMatchers(HttpMethod.GET, "/order").permitAll()
+
             httpRequests.anyRequest().denyAll()
         }
 
