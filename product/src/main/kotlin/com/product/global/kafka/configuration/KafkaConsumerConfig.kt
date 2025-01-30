@@ -1,6 +1,7 @@
 package com.product.global.kafka.configuration
 
 import com.product.global.kafka.consumer.OrderReservedConsumer
+import com.product.global.kafka.consumer.PaymentFailedConsumer
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,6 +19,10 @@ class KafkaConsumerConfig(
 
     @Bean
     fun orderReservedEventListenerContainerFactory(listener: OrderReservedConsumer): ConcurrentKafkaListenerContainerFactory<String, String> =
+        makeFactory(listener)
+
+    @Bean
+    fun paymentFailedEventListenerContainerFactory(listener: PaymentFailedConsumer): ConcurrentKafkaListenerContainerFactory<String, String> =
         makeFactory(listener)
 
     private fun makeFactory(listener: AcknowledgingMessageListener<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
