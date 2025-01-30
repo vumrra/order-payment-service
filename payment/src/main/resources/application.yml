@@ -17,10 +17,13 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: ${DDL_AUTO:update}
+      ddl-auto: ${DDL_AUTO:create}
     properties:
       hibernate:
         default_batch_fetch_size: 1000
+  sql:
+    init:
+      mode: always
   datasource:
     url: jdbc:mysql://${DB_URL:localhost:3306}/${DB_NAME:op_payment}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: ${DB_USER:root}
