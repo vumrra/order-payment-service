@@ -2,7 +2,7 @@ package com.order.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.order.domain.order.application.OrderService
-import com.order.domain.order.event.ProductReserveFailedEvent
+import com.order.global.kafka.consumer.dto.ProductReserveFailedEvent
 import com.order.domain.order.persistence.OrderCancelReason
 import com.order.global.kafka.properties.KafkaTopics.PRODUCT_RESERVE_FAILED
 import org.apache.kafka.clients.consumer.ConsumerRecord

@@ -2,7 +2,7 @@ package com.product.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.product.domain.product.application.ProductService
-import com.product.domain.product.event.OrderReservedEvent
+import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReserveFailedEvent
 import com.product.global.kafka.properties.KafkaTopics.ORDER_RESERVED
 import com.product.global.kafka.publisher.ProductPublisher

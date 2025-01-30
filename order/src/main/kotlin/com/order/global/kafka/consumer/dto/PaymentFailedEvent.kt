@@ -1,4 +1,4 @@
-package com.order.domain.order.event
+package com.order.global.kafka.consumer.dto
 
 data class PaymentFailedEvent(
     val id: String,

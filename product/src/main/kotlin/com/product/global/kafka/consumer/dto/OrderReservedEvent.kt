@@ -1,4 +1,4 @@
-package com.product.domain.product.event
+package com.product.global.kafka.consumer.dto
 
 data class OrderReservedEvent(
     val id: String,

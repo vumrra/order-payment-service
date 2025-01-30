@@ -1,8 +1,7 @@
 package com.product.domain.product.application
 
-import com.product.domain.product.event.OrderReservedEvent
+import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReservedEvent
-import com.product.domain.product.persistence.Product
 import com.product.domain.product.persistence.ProductRepository
 import com.product.global.error.ProductException
 import org.springframework.context.ApplicationEventPublisher

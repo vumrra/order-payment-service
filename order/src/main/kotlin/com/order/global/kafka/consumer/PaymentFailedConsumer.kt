@@ -2,7 +2,7 @@ package com.order.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.order.domain.order.application.OrderService
-import com.order.domain.order.event.PaymentFailedEvent
+import com.order.global.kafka.consumer.dto.PaymentFailedEvent
 import com.order.domain.order.persistence.OrderCancelReason
 import com.order.global.kafka.properties.KafkaTopics.PAYMENT_FAILED
 import org.apache.kafka.clients.consumer.ConsumerRecord
