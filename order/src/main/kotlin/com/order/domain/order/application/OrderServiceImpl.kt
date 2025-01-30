@@ -42,6 +42,7 @@ class OrderServiceImpl(
             OrderReservedEvent(
                 id = UUID.randomUUID().toString(),
                 orderId = order.id,
+                userId = currentUserId,
                 products = products.map {
                     ProductEvent(
                         productId = it.productId,

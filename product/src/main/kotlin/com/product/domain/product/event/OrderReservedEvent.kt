@@ -1,4 +1,4 @@
-package com.order.domain.order.event
+package com.product.domain.product.event
 
 data class OrderReservedEvent(
     val id: String,
