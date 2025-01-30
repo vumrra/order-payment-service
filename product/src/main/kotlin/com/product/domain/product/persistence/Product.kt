@@ -12,7 +12,7 @@ class Product(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     val name: String,
-    val price: Int,
+    val price: Long,
     var quantity: Int,
     val createdDate: LocalDateTime = LocalDateTime.now(),
 ) {
@@ -26,7 +26,7 @@ class Product(
     }
 
     companion object {
-        fun of(name: String, price: Int, quantity: Int) =
+        fun of(name: String, price: Long, quantity: Int) =
             Product(
                 name = name,
                 price = price,

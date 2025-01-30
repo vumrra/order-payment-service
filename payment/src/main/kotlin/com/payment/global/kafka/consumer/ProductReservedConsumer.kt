@@ -1,6 +1,7 @@
 package com.payment.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.payment.domain.account.application.PaymentService
 import com.payment.global.kafka.consumer.dto.ProductReservedEvent
 import com.payment.global.kafka.properties.KafkaTopics.PRODUCT_RESERVED
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class ProductReservedConsumer(
     private val objectMapper: ObjectMapper,
+    private val paymentService: PaymentService,
 ) : AcknowledgingMessageListener<String, String> {
 
     private val log = LoggerFactory.getLogger(this::class.java.simpleName)
@@ -25,6 +27,18 @@ class ProductReservedConsumer(
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {
         val (key, event) = data.key() to objectMapper.readValue(data.value(), ProductReservedEvent::class.java)
         log.info("${PRODUCT_RESERVED}Topic, key: $key, event: $event")
+
+        try {
+            paymentService.pay(
+                userId = event.userId,
+                move = event.totalPrice,
+                depositDestination = event.depositDestination,
+            )
+        } catch (e: Exception) {
+            log.error("Failed to Payment, user id = ${event.userId}, depositDestination = ${event.depositDestination}", e)
+
+
+        }
 
         acknowledgment!!.acknowledge()
     }

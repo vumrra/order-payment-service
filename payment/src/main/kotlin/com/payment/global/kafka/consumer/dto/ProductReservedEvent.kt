@@ -4,5 +4,6 @@ data class ProductReservedEvent(
     val id: String,
     val userId: Long,
     val orderId: Long,
-    val totalPrice: Int
+    val depositDestination: String,
+    val totalPrice: Long
 )

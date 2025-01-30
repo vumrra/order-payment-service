@@ -42,6 +42,7 @@ class OrderServiceImpl(
                 id = UUID.randomUUID().toString(),
                 orderId = order.id,
                 userId = currentUserId,
+                depositDestination = "주문의 민족",
                 products = products.map {
                     ProductEvent(
                         productId = it.productId,

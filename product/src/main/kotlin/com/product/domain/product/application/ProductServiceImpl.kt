@@ -34,6 +34,7 @@ class ProductServiceImpl(
                 id = UUID.randomUUID().toString(),
                 userId = event.userId,
                 orderId = event.orderId,
+                depositDestination = event.depositDestination,
                 totalPrice = totalPrice
             )
         )
