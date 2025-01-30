@@ -30,7 +30,7 @@ class OrderReservedConsumer(
     )
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {
         val (key, event) = data.key() to objectMapper.readValue(data.value(), OrderReservedEvent::class.java)
-        log.info("OrderReservedTopic: order-reserved, key: $key, event: $event")
+        log.info("${ORDER_RESERVED}Topic, key: $key, event: $event")
 
         try {
             productService.deductedProduct(event)

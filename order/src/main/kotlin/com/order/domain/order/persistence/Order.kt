@@ -15,8 +15,16 @@ class Order(
     val orderProducts: List<OrderProduct> = emptyList(),
     @Enumerated(EnumType.STRING)
     var status: OrderStatus,
+    @Enumerated(EnumType.STRING)
+    var cancelReason: OrderCancelReason? = null,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
+
+    fun cancel(reason: OrderCancelReason) {
+        status = OrderStatus.CANCELLED
+        cancelReason = reason
+    }
+
     companion object {
         fun of(userId: Long): Order =
             Order(
@@ -29,4 +37,8 @@ class Order(
 
 enum class OrderStatus {
     PENDING, CANCELLED, CONFIRMED
+}
+
+enum class OrderCancelReason {
+    OUT_OF_STOCK, NO_MONEY
 }
