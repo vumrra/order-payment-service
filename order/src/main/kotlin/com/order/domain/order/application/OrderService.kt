@@ -5,5 +5,6 @@ import com.order.domain.order.persistence.OrderCancelReason
 
 interface OrderService {
     fun order(dto: OrderReqDto)
-    fun cancelOrder(orderId: Long, reason: OrderCancelReason)
+    fun cancel(orderId: Long, reason: OrderCancelReason)
+    fun confirm(orderId: Long)
 }

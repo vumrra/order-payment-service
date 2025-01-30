@@ -2,9 +2,8 @@ package com.order.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.order.domain.order.application.OrderService
-import com.order.domain.order.event.ProductReserveFailedEvent
-import com.order.domain.order.persistence.OrderCancelReason
-import com.order.global.kafka.properties.KafkaTopics.PRODUCT_RESERVE_FAILED
+import com.order.domain.order.event.PaymentSuccessEvent
+import com.order.global.kafka.properties.KafkaTopics.PAYMENT_SUCCESS
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
@@ -13,7 +12,7 @@ import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Service
 
 @Service
-class ProductReserveFailedConsumer(
+class PaymentSuccessConsumer(
     private val objectMapper: ObjectMapper,
     private val orderService: OrderService,
 ) : AcknowledgingMessageListener<String, String> {
@@ -21,15 +20,15 @@ class ProductReserveFailedConsumer(
     private val log = LoggerFactory.getLogger(this::class.java.simpleName)
 
     @KafkaListener(
-        topics = [PRODUCT_RESERVE_FAILED],
+        topics = [PAYMENT_SUCCESS],
         groupId = "op",
-        containerFactory = "productReserveFailedEventListenerContainerFactory"
+        containerFactory = "paymentSuccessEventListenerContainerFactory"
     )
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {
-        val (key, event) = data.key() to objectMapper.readValue(data.value(), ProductReserveFailedEvent::class.java)
-        log.info("${PRODUCT_RESERVE_FAILED}Topic, key: $key, event: $event")
+        val (key, event) = data.key() to objectMapper.readValue(data.value(), PaymentSuccessEvent::class.java)
+        log.info("${PAYMENT_SUCCESS}Topic, key: $key, event: $event")
 
-        orderService.cancel(event.orderId, OrderCancelReason.OUT_OF_STOCK)
+        orderService.confirm(event.orderId)
 
         acknowledgment!!.acknowledge()
     }

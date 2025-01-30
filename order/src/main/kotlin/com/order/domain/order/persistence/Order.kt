@@ -25,6 +25,10 @@ class Order(
         cancelReason = reason
     }
 
+    fun confirm() {
+        status = OrderStatus.CONFIRMED
+    }
+
     companion object {
         fun of(userId: Long): Order =
             Order(
@@ -40,5 +44,5 @@ enum class OrderStatus {
 }
 
 enum class OrderCancelReason {
-    OUT_OF_STOCK, NO_MONEY
+    OUT_OF_STOCK, PAYMENT_FAILED
 }

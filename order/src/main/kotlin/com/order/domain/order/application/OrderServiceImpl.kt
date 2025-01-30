@@ -54,11 +54,20 @@ class OrderServiceImpl(
     }
 
     @Transactional
-    override fun cancelOrder(orderId: Long, reason: OrderCancelReason) {
+    override fun cancel(orderId: Long, reason: OrderCancelReason) {
         val order = (orderRepository.findByIdOrNull(orderId)
             ?: throw OrderException("Not Found Order with id: $orderId", HttpStatus.NOT_FOUND))
 
         order.cancel(reason)
+        orderRepository.save(order)
+    }
+
+    @Transactional
+    override fun confirm(orderId: Long) {
+        val order = (orderRepository.findByIdOrNull(orderId)
+            ?: throw OrderException("Not Found Order with id: $orderId", HttpStatus.NOT_FOUND))
+
+        order.confirm()
         orderRepository.save(order)
     }
 
