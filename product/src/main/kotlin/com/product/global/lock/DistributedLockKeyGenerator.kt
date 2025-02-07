@@ -13,9 +13,7 @@ class DistributedLockKeyGenerator {
                 context.setVariable(parameterNames[i], args[i])
             }
 
-            val parsedKey = parser.parseExpression(key).getValue(context, List::class.java) ?: emptyList<String>()
-            println("Generated lock key: $parsedKey")
-            return parsedKey
+            return parser.parseExpression(key).getValue(context, Object::class)!!
         }
     }
 }

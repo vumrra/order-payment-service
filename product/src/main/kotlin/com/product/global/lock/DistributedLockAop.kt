@@ -22,7 +22,6 @@ class DistributedLockAop(
     }
 
     private val log = LoggerFactory.getLogger(this.javaClass.name)
-
     @Around("@annotation(com.product.global.lock.DistributedLock)")
     fun lock(joinPoint: ProceedingJoinPoint): Any? {
         val signature = joinPoint.signature as MethodSignature
@@ -35,11 +34,10 @@ class DistributedLockAop(
             key = distributedLock.key
         ).toString()
 
-        val keys = if (rawKey.startsWith("reserve_product_[")) {
+        val keys: List<String> = if (rawKey.contains("reserve_product_")) {
             rawKey.removePrefix("reserve_product_")
                 .removeSurrounding("[", "]")
                 .split(",")
-                .map { it.trim() }
                 .map { "reserve_product_$it" }
         } else {
             listOf(rawKey)
