@@ -22,7 +22,7 @@ class PaymentFailedConsumer(
 
     @KafkaListener(
         topics = [PAYMENT_FAILED],
-        groupId = "op",
+        groupId = "op-order",
         containerFactory = "paymentFailedEventListenerContainerFactory"
     )
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {

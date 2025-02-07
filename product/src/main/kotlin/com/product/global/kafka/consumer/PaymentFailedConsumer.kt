@@ -2,20 +2,14 @@ package com.product.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.product.domain.product.application.ProductService
-import com.product.global.kafka.consumer.dto.OrderReservedEvent
-import com.product.domain.product.event.ProductReserveFailedEvent
-import com.product.global.internal.order.stub.OrderCancelReason.*
 import com.product.global.kafka.consumer.dto.PaymentFailedEvent
-import com.product.global.kafka.properties.KafkaTopics.ORDER_RESERVED
 import com.product.global.kafka.properties.KafkaTopics.PAYMENT_FAILED
-import com.product.global.kafka.publisher.ProductPublisher
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.listener.AcknowledgingMessageListener
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class PaymentFailedConsumer(
@@ -27,7 +21,7 @@ class PaymentFailedConsumer(
 
     @KafkaListener(
         topics = [PAYMENT_FAILED],
-        groupId = "op",
+        groupId = "op-product",
         containerFactory = "paymentFailedEventListenerContainerFactory"
     )
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {
