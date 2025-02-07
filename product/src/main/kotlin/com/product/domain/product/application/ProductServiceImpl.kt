@@ -8,11 +8,13 @@ import com.product.domain.product.persistence.ProductRepository
 import com.product.global.error.ProductException
 import com.product.global.internal.order.api.OrderApi
 import com.product.global.kafka.consumer.dto.PaymentFailedEvent
+import com.product.global.lock.DistributedLock
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.lang.Thread.sleep
 import java.time.LocalDateTime
 import java.util.*
 
@@ -23,6 +25,8 @@ class ProductServiceImpl(
     private val orderApi: OrderApi
 ) : ProductService {
 
+//    @DistributedLock(key = "'reserve_product_' + #event.userId")
+    @DistributedLock(key = "'reserve_product_' + #event.products.![productId]")
     @Transactional
     override fun deductedProduct(event: OrderReservedEvent) {
 
@@ -37,6 +41,8 @@ class ProductServiceImpl(
             product.deduction(it.quantity)
             productRepository.save(product)
         }
+
+        sleep(2000)
 
         applicationEventPublisher.publishEvent(
             ProductReservedEvent(

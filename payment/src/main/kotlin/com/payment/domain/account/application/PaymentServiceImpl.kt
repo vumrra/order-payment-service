@@ -5,6 +5,7 @@ import com.payment.domain.account.persistence.AccountHistory
 import com.payment.domain.account.persistence.AccountHistoryRepository
 import com.payment.domain.account.persistence.AccountRepository
 import com.payment.global.error.PaymentException
+import com.payment.global.lock.DistributedLock
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -19,6 +20,7 @@ class PaymentServiceImpl(
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) : PaymentService {
 
+    @DistributedLock(key = "'pay_' + #userId")
     @Transactional
     override fun pay(userId: Long, orderId: Long, move: Long, depositDestination: String) {
         val account = (accountRepository.findByUserId(userId)
