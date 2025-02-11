@@ -14,6 +14,12 @@ class Product(
     val name: String,
     val price: Long,
     var quantity: Int,
+    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne(cascade = [(CascadeType.ALL)])
+    val category: Category,
+    @JoinColumn(name = "sale_id", nullable = true, unique = false)
+    @OneToOne(cascade = [(CascadeType.ALL)])
+    val sale: Sale? = null,
     val createdDate: LocalDateTime = LocalDateTime.now(),
 ) {
 
@@ -30,11 +36,12 @@ class Product(
     }
 
     companion object {
-        fun of(name: String, price: Long, quantity: Int) =
+        fun of(name: String, price: Long, quantity: Int, category: Category) =
             Product(
                 name = name,
                 price = price,
                 quantity = quantity,
+                category = category,
                 createdDate = LocalDateTime.now()
             )
     }

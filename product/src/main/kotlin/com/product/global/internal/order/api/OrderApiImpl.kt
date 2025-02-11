@@ -11,4 +11,8 @@ class OrderApiImpl(
     override fun queryById(orderId: Long) =
         orderClient.queryById(orderId)
 
+    override fun queryOrderCount(productId: Long) =
+        orderClient.queryOrderCount(productId)
+
+
 }

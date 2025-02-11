@@ -1,7 +1,27 @@
-CREATE TABLE IF NOT EXISTS tbl_product (
-   id BIGINT AUTO_INCREMENT PRIMARY KEY,
-   name VARCHAR(255) NOT NULL,
-    price BIGINT NOT NULL,
-    quantity INT NOT NULL,
-    created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+--
+--
+-- CREATE TABLE IF NOT EXISTS tbl_category (
+--                               id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--                               name VARCHAR(255) NOT NULL
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS tbl_sale (
+--                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--                           name VARCHAR(255) NOT NULL,
+--                           percentage INT NOT NULL,
+--                           start_date DATETIME NOT NULL,
+--                           end_date DATETIME NOT NULL
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS tbl_product (
+--                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
+--                              name VARCHAR(255) NOT NULL,
+--                              price BIGINT NOT NULL,
+--                              quantity INT NOT NULL,
+--                              created_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--                              category_id BIGINT NOT NULL,
+--                              sale_id BIGINT
+-- );
+--
+-- ALTER TABLE tbl_product ADD CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES tbl_category(id);
+-- ALTER TABLE tbl_product ADD CONSTRAINT fk_sale FOREIGN KEY (sale_id) REFERENCES tbl_sale(id);

@@ -1,7 +1,8 @@
 package com.product.domain.product.application
 
-import com.product.domain.product.dto.ProductAllDto
 import com.product.domain.product.dto.ProductDto
+import com.product.domain.product.dto.ProductsDto
+import com.product.domain.product.dto.SaleDto
 import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReservedEvent
 import com.product.domain.product.persistence.ProductRepository
@@ -66,21 +67,70 @@ class ProductServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun queryAllProducts(): ProductAllDto {
-        val products = productRepository.findAll().map {
+    override fun queryProducts(categoryId: Long): ProductsDto {
+        val products = productRepository.findByCategoryId(categoryId)
+
+        val productDto = products.map { product ->
+            val orderCount = orderApi.queryOrderCount(product.id)
+
             ProductDto(
-                productId = it.id,
-                name = it.name,
-                price = it.price,
-                quantity = it.quantity,
+                productId = product.id,
+                categoryId = product.category.id,
+                categoryName = product.category.name,
+                name = product.name,
+                originPrice = product.price,
+                quantity = product.quantity,
+                isSale = product.sale != null,
+                orderCount = orderCount.count,
+                totalOrderQuantity = orderCount.totalQuantity,
+                saleInfo = product.sale?.let {
+                    SaleDto(
+                        salePercentage = it.percentage,
+                        salePrice = product.price * it.percentage / 100,
+                        saleStartDate = it.startDate,
+                        saleEndDate = it.endDate,
+                    )
+                },
                 createdDate = LocalDateTime.now(),
             )
         }
 
-        return ProductAllDto(
-            count = products.size,
-            products = products
+        return ProductsDto(
+            count = productDto.size,
+            categoryName = products[0].category.name,
+            products = productDto
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryProduct(productId: Long): ProductDto {
+        val product = (productRepository.findByIdOrNull(productId)
+            ?: throw ProductException("Product with id ${productId} not found", HttpStatus.NOT_FOUND))
+
+        val productOrderCount = orderApi.queryOrderCount(productId)
+
+         return product.let { p ->
+            ProductDto(
+                productId = p.id,
+                categoryId = p.category.id,
+                categoryName = p.category.name,
+                name = p.name,
+                originPrice = p.price,
+                quantity = p.quantity,
+                isSale = p.sale != null,
+                orderCount = productOrderCount.count,
+                totalOrderQuantity = productOrderCount.totalQuantity,
+                saleInfo = p.sale?.let {
+                    SaleDto(
+                        salePercentage = it.percentage,
+                        salePrice = p.price * it.percentage / 100,
+                        saleStartDate = it.startDate,
+                        saleEndDate = it.endDate,
+                    )
+                },
+                createdDate = LocalDateTime.now(),
+            )
+        }
     }
 
 }

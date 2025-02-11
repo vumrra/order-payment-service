@@ -47,6 +47,7 @@ class SecurityConfig(
 
             // product
             httpRequests.requestMatchers(HttpMethod.GET, "/product").authenticated()
+            httpRequests.requestMatchers(HttpMethod.GET, "/product/{product_id}").authenticated()
 
             httpRequests.anyRequest().denyAll()
         }

@@ -7,6 +7,11 @@ data class OrderResDto(
     val orderProducts: List<ProductDto>
 )
 
+data class ProductOrderCountDto(
+    val count: Long,
+    val totalQuantity: Int
+)
+
 data class ProductDto(
     val productId: Long,
     val quantity: Int
