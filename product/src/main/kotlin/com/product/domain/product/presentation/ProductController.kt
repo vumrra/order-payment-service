@@ -1,8 +1,9 @@
 package com.product.domain.product.presentation
 
 import com.product.domain.product.application.ProductService
-import com.product.domain.product.dto.ProductDto
-import com.product.domain.product.dto.ProductsDto
+import com.product.domain.product.dto.CreateProductDto
+import com.product.domain.product.persistence.ProductDocument
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -12,6 +13,7 @@ class ProductController(
     private val productService: ProductService
 ) {
 
+    /*
     @GetMapping
     fun queryProducts(
         @RequestParam categoryId: Long,
@@ -19,11 +21,20 @@ class ProductController(
         val response = productService.queryProducts(categoryId)
         return ResponseEntity.ok(response)
     }
+    */
+
+    @PostMapping
+    fun createProduct(
+        @RequestBody dto: CreateProductDto
+    ): ResponseEntity<Map<String, Long>> {
+        val response = productService.createProduct(dto)
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(mapOf("productId" to response))
+    }
 
     @GetMapping("/{product_id}")
     fun queryProduct(
         @PathVariable("product_id") productId: Long,
-    ): ResponseEntity<ProductDto> {
+    ): ResponseEntity<ProductDocument> {
         val response = productService.queryProduct(productId)
         return ResponseEntity.ok(response)
     }

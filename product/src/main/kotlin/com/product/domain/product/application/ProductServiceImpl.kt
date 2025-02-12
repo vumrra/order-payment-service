@@ -1,11 +1,13 @@
 package com.product.domain.product.application
 
+import com.product.domain.product.dto.CreateProductDto
 import com.product.domain.product.dto.ProductDto
 import com.product.domain.product.dto.ProductsDto
 import com.product.domain.product.dto.SaleDto
+import com.product.domain.product.event.ProductCreatedEvent
 import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReservedEvent
-import com.product.domain.product.persistence.ProductRepository
+import com.product.domain.product.persistence.*
 import com.product.global.error.ProductException
 import com.product.global.internal.order.api.OrderApi
 import com.product.global.kafka.consumer.dto.PaymentFailedEvent
@@ -21,7 +23,9 @@ import java.util.*
 @Service
 class ProductServiceImpl(
     private val applicationEventPublisher: ApplicationEventPublisher,
+    private val categoryRepository: CategoryRepository,
     private val productRepository: ProductRepository,
+    private val mongoProductRepository: MongoProductRepository,
     private val orderApi: OrderApi
 ) : ProductService {
 
@@ -103,34 +107,39 @@ class ProductServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun queryProduct(productId: Long): ProductDto {
-        val product = (productRepository.findByIdOrNull(productId)
-            ?: throw ProductException("Product with id ${productId} not found", HttpStatus.NOT_FOUND))
-
-        val productOrderCount = orderApi.queryOrderCount(productId)
-
-         return product.let { p ->
-            ProductDto(
-                productId = p.id,
-                categoryId = p.category.id,
-                categoryName = p.category.name,
-                name = p.name,
-                originPrice = p.price,
-                quantity = p.quantity,
-                isSale = p.sale != null,
-                orderCount = productOrderCount.count,
-                totalOrderQuantity = productOrderCount.totalQuantity,
-                saleInfo = p.sale?.let {
-                    SaleDto(
-                        salePercentage = it.percentage,
-                        salePrice = p.price * it.percentage / 100,
-                        saleStartDate = it.startDate,
-                        saleEndDate = it.endDate,
-                    )
-                },
-                createdDate = LocalDateTime.now(),
-            )
-        }
+    override fun queryProduct(productId: Long): ProductDocument {
+        return mongoProductRepository.findById(productId)
+            .orElseThrow { throw ProductException("Product with id ${productId} not found", HttpStatus.NOT_FOUND) }
     }
 
+    @Transactional
+    override fun createProduct(dto: CreateProductDto): Long {
+        val category = (categoryRepository.findByIdOrNull(dto.categoryId)
+            ?: throw ProductException("Category with id ${dto.categoryId} not found", HttpStatus.NOT_FOUND))
+
+        val product = dto.let {
+            Product.of(
+                name = it.name,
+                price = it.price,
+                quantity = it.quantity,
+                category = category,
+            )
+        }
+
+        val savedProduct = productRepository.save(product)
+
+        applicationEventPublisher.publishEvent(
+            ProductCreatedEvent(
+                categoryId = category.id,
+                categoryName = category.name,
+                productId = savedProduct.id,
+                name = savedProduct.name,
+                price = savedProduct.price,
+                quantity = savedProduct.quantity,
+                createdDate = savedProduct.createdDate,
+            )
+        )
+
+        return savedProduct.id
+    }
 }
