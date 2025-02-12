@@ -1,7 +1,7 @@
 package com.product.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.product.domain.product.application.ProductService
+import com.product.domain.product.application.ProductCommandService
 import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReserveFailedEvent
 import com.product.global.kafka.properties.KafkaTopics.ORDER_RESERVED
@@ -18,7 +18,7 @@ import java.util.*
 class OrderReservedConsumer(
     private val objectMapper: ObjectMapper,
     private val productPublisher: ProductPublisher,
-    private val productService: ProductService
+    private val productService: ProductCommandService
 ) : AcknowledgingMessageListener<String, String> {
 
     private val log = LoggerFactory.getLogger(this::class.java.simpleName)
