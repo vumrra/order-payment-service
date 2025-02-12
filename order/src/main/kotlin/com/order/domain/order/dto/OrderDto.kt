@@ -20,6 +20,7 @@ data class ProductDto(
 )
 
 data class ProductOrderCount(
+    val productId: Long,
     val count: Int,
     val totalQuantity: Int
 )

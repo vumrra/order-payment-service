@@ -1,11 +1,22 @@
 package com.order.domain.order.persistence
 
+import com.order.domain.order.persistence.dto.ProductOrderInfoDto
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface OrderRepository : JpaRepository<Order, Long> {
     @Query(
-        "SELECT op FROM Order o JOIN OrderProduct op ON op.order.id = o.id WHERE op.productId = :productId"
+        """
+                SELECT new com.order.domain.order.persistence.dto.ProductOrderInfoDto(
+                    op.productId, 
+                    COUNT(op), 
+                    SUM(op.quantity)
+                )
+                FROM OrderProduct op
+                JOIN op.order o
+                WHERE op.productId IN :productIds
+                GROUP BY op.productId
+        """
     )
-    fun orderProductByProductId(productId: Long): List<OrderProduct>
+    fun findOrderProductInfoByProductIds(productIds: List<Long>): List<ProductOrderInfoDto>
 }

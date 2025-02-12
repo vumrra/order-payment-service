@@ -72,38 +72,40 @@ class ProductServiceImpl(
 
     @Transactional(readOnly = true)
     override fun queryProducts(categoryId: Long): ProductsDto {
-        val products = productRepository.findByCategoryId(categoryId)
+//        val products = productRepository.findByCategoryId(categoryId)
+//
+//        val productDto = products.map { product ->
+//            val orderCount = orderApi.queryOrderCount(product.id)
+//
+//            ProductDto(
+//                productId = product.id,
+//                categoryId = product.category.id,
+//                categoryName = product.category.name,
+//                name = product.name,
+//                originPrice = product.price,
+//                quantity = product.quantity,
+//                isSale = product.sale != null,
+//                orderCount = orderCount.count,
+//                totalOrderQuantity = orderCount.totalQuantity,
+//                saleInfo = product.sale?.let {
+//                    SaleDto(
+//                        salePercentage = it.percentage,
+//                        salePrice = product.price * it.percentage / 100,
+//                        saleStartDate = it.startDate,
+//                        saleEndDate = it.endDate,
+//                    )
+//                },
+//                createdDate = LocalDateTime.now(),
+//            )
+//        }
 
-        val productDto = products.map { product ->
-            val orderCount = orderApi.queryOrderCount(product.id)
+//        return ProductsDto(
+//            count = productDto.size,
+//            categoryName = products[0].category.name,
+//            products = productDto
+//        )
 
-            ProductDto(
-                productId = product.id,
-                categoryId = product.category.id,
-                categoryName = product.category.name,
-                name = product.name,
-                originPrice = product.price,
-                quantity = product.quantity,
-                isSale = product.sale != null,
-                orderCount = orderCount.count,
-                totalOrderQuantity = orderCount.totalQuantity,
-                saleInfo = product.sale?.let {
-                    SaleDto(
-                        salePercentage = it.percentage,
-                        salePrice = product.price * it.percentage / 100,
-                        saleStartDate = it.startDate,
-                        saleEndDate = it.endDate,
-                    )
-                },
-                createdDate = LocalDateTime.now(),
-            )
-        }
-
-        return ProductsDto(
-            count = productDto.size,
-            categoryName = products[0].category.name,
-            products = productDto
-        )
+        TODO()
     }
 
     @Transactional(readOnly = true)

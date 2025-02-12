@@ -14,11 +14,16 @@ data class ProductDocument(
     val originPrice: Long,
     val quantity: Int,
     val isSale: Boolean,
-    val orderCount: Long,
-    val totalOrderQuantity: Int,
+    var orderCount: Long,
+    var totalOrderQuantity: Int,
     val saleInfo: SaleDocument? = null,
     val createdDate: LocalDateTime
-)
+) {
+    fun updateOrderInfo(orderCount: Long, totalOrderQuantity: Int) {
+        this.orderCount = orderCount
+        this.totalOrderQuantity = totalOrderQuantity
+    }
+}
 
 data class SaleDocument(
     val saleStartDate: LocalDateTime,

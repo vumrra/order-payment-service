@@ -15,24 +15,24 @@ class ProductProcessor(
 
     @Transactional
     fun createProductReadModel(event: ProductCreatedEvent) {
-        val productDocument = event.let {
-            val orderCount = orderApi.queryOrderCount(event.productId)
-
-            ProductDocument(
-                productId = it.productId,
-                name = it.name,
-                categoryId = it.categoryId,
-                categoryName = it.categoryName,
-                originPrice = it.price,
-                quantity = it.quantity,
-                createdDate = it.createdDate,
-                isSale = false,
-                orderCount = orderCount.count,
-                totalOrderQuantity = orderCount.totalQuantity,
-            )
-        }
-
-        mongoProductRepository.save(productDocument)
+//        val productDocument = event.let {
+//            val orderCount = orderApi.queryOrderCount(event.productId)
+//
+//            ProductDocument(
+//                productId = it.productId,
+//                name = it.name,
+//                categoryId = it.categoryId,
+//                categoryName = it.categoryName,
+//                originPrice = it.price,
+//                quantity = it.quantity,
+//                createdDate = it.createdDate,
+//                isSale = false,
+//                orderCount = orderCount.count,
+//                totalOrderQuantity = orderCount.totalQuantity,
+//            )
+//        }
+//
+//        mongoProductRepository.save(productDocument)
     }
 
 }
