@@ -1,7 +1,8 @@
 package com.product.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.product.domain.product.application.ProductService
+import com.product.domain.product.application.ProductCommandService
+import com.product.domain.product.application.ProductProcessor
 import com.product.global.kafka.consumer.dto.OrderReservedEvent
 import com.product.domain.product.event.ProductReserveFailedEvent
 import com.product.global.kafka.properties.KafkaTopics.ORDER_RESERVED
@@ -18,7 +19,8 @@ import java.util.*
 class OrderReservedConsumer(
     private val objectMapper: ObjectMapper,
     private val productPublisher: ProductPublisher,
-    private val productService: ProductService
+    private val productService: ProductCommandService,
+    private val productProcessor: ProductProcessor
 ) : AcknowledgingMessageListener<String, String> {
 
     private val log = LoggerFactory.getLogger(this::class.java.simpleName)
@@ -33,6 +35,8 @@ class OrderReservedConsumer(
         log.info("${ORDER_RESERVED}Topic, key: $key, event: $event")
 
         try {
+            // Async
+            productProcessor.updateProductQuantityReadModel(event.products)
             productService.deductedProduct(event)
         } catch (_: Exception) {
             log.error("Failed to Reserve Product order id = ${event.orderId}, user id = ${event.userId}")

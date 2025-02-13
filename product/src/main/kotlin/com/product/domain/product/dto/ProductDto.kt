@@ -7,6 +7,13 @@ data class CategoryDto(
     val name: String,
 )
 
+data class CreateProductDto(
+    val categoryId: Long,
+    val name: String,
+    val price: Long,
+    val quantity: Int,
+)
+
 data class ProductsDto(
     val count: Int,
     val categoryName: String,

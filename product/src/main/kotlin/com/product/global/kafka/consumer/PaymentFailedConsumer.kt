@@ -1,7 +1,7 @@
 package com.product.global.kafka.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.product.domain.product.application.ProductService
+import com.product.domain.product.application.ProductCommandService
 import com.product.global.kafka.consumer.dto.PaymentFailedEvent
 import com.product.global.kafka.properties.KafkaTopics.PAYMENT_FAILED
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class PaymentFailedConsumer(
     private val objectMapper: ObjectMapper,
-    private val productService: ProductService
+    private val productService: ProductCommandService
 ) : AcknowledgingMessageListener<String, String> {
 
     private val log = LoggerFactory.getLogger(this::class.java.simpleName)

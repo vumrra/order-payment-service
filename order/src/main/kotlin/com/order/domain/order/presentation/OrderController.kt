@@ -5,6 +5,7 @@ import com.order.domain.order.dto.OrderReqDto
 import com.order.domain.order.dto.OrderResDto
 import com.order.domain.order.dto.ProductOrderCount
 import com.order.domain.order.persistence.OrderRepository
+import com.order.domain.order.persistence.dto.ProductOrderInfoReqDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -32,22 +33,20 @@ class OrderController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/order-count")
+    @PostMapping("/order-count")
     fun queryProductOrderCount(
-        @RequestParam("productId") productId: Long
-    ): ResponseEntity<ProductOrderCount> {
+        @RequestBody productOrderInfoReqDto: ProductOrderInfoReqDto
+    ): ResponseEntity<List<ProductOrderCount>> {
 
-        val orderProducts = orderRepository.orderProductByProductId(productId)
-        var totalQuantity = 0
-
-        orderProducts.forEach { order ->
-            totalQuantity += order.quantity
+        val orderProducts = orderRepository.findOrderProductInfoByProductIds(productOrderInfoReqDto.productIds).map {
+            ProductOrderCount(
+                productId = it.productId,
+                count = it.count.toInt(),
+                totalQuantity = it.totalQuantity.toInt()
+            )
         }
 
-        return ResponseEntity.ok(ProductOrderCount(
-            count = orderProducts.size,
-            totalQuantity = totalQuantity
-        ))
+        return ResponseEntity.ok(orderProducts)
     }
 
 }

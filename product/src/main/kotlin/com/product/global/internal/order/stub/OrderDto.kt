@@ -8,8 +8,13 @@ data class OrderResDto(
 )
 
 data class ProductOrderCountDto(
+    val productId: Long,
     val count: Long,
     val totalQuantity: Int
+)
+
+data class ProductOrderInfoReqDto(
+    val productIds: List<Long>,
 )
 
 data class ProductDto(
