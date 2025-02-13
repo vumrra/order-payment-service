@@ -17,7 +17,7 @@ class BatchScheduler(
     private val log = LoggerFactory.getLogger(javaClass)
 
     // 매일 새벽 3시에 전체 Product Read Model Full Batch Sync
-    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "30 59 18 * * *", zone = "Asia/Seoul")
     fun runBatchJob() {
         log.info("[Batch] 상품 동기화 시작: ${LocalDateTime.now()}")
 

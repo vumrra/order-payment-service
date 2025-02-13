@@ -12,7 +12,7 @@ data class ProductDocument(
     val categoryName: String,
     val name: String,
     val originPrice: Long,
-    val quantity: Int,
+    var quantity: Int,
     val isSale: Boolean,
     var orderCount: Long,
     var totalOrderQuantity: Int,
@@ -22,6 +22,10 @@ data class ProductDocument(
     fun updateOrderInfo(orderCount: Long, totalOrderQuantity: Int) {
         this.orderCount = orderCount
         this.totalOrderQuantity = totalOrderQuantity
+    }
+
+    fun updateQuantity(updatedQuantity: Int) {
+        this.quantity = updatedQuantity
     }
 }
 

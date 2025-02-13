@@ -21,7 +21,8 @@ class ProductCommandServiceImpl(
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val categoryRepository: CategoryRepository,
     private val productRepository: ProductRepository,
-    private val orderApi: OrderApi
+    private val orderApi: OrderApi,
+    private val productProcessor: ProductProcessor
 ) : ProductCommandService {
 
     @DistributedLock(key = "'reserve_product_' + #event.products.![productId]")
@@ -63,6 +64,9 @@ class ProductCommandServiceImpl(
             product.add(it.quantity)
             productRepository.save(product)
         }
+
+        // Async
+        productProcessor.updateProductQuantityReadModel(orderDto.orderProducts)
     }
 
     @Transactional
